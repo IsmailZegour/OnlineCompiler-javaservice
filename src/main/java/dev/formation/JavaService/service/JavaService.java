@@ -132,7 +132,7 @@ public class JavaService {
                     String lineNumber = parts[1].trim();
                     String errorMessage = parts[3].trim();
 
-                    String trueLineNumber=String.valueOf(Integer.parseInt(lineNumber)-4);
+                    String trueLineNumber=String.valueOf(Integer.parseInt(lineNumber)-5);
 
                     formattedError.append("Error at line ").append(trueLineNumber)
                             .append(" : ").append(errorMessage)
