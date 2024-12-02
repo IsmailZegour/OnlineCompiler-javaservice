@@ -3,12 +3,15 @@ phases:
   install:
     commands:
       - echo Installing Java 21...
-      - sudo yum install -y java-21-openjdk-devel
-      - java -version
+      - sudo yum install -y java-21-amazon-corretto-devel # Installe Java 21
+      - sudo alternatives --config java <<< '1' # Définit Java 21 comme version par défaut
+      - java -version # Vérifie que Java 21 est bien utilisé
   pre_build:
     commands:
-      - echo Installing Maven dependencies and building the JAR file...
-      - mvn clean install -DskipTests # Compile le projet et génère le fichier JAR
+      - echo Setting JAVA_HOME for Maven...
+      - export JAVA_HOME=/usr/lib/jvm/java-21-amazon-corretto # Définit JAVA_HOME pour Maven
+      - export PATH=$JAVA_HOME/bin:$PATH # Met à jour le PATH pour inclure Java 21
+      - mvn clean install -DskipTests # Compile le projet avec Maven
       - echo Logging in to Amazon ECR...
       - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
   build:
