@@ -1,0 +1,24 @@
+version: 0.2
+env:
+  variables:
+    AWS_REGION: "eu-west-3"
+    AWS_ACCOUNT_ID: "123456789012" # Remplacez par votre ID de compte AWS
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
+  build:
+    commands:
+      - echo Building Docker image...
+      - docker build -t javaservice .
+      - docker tag javaservice:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/javaservice:latest
+  post_build:
+    commands:
+      - echo Pushing Docker image to Amazon ECR...
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/javaservice:latest
+      - echo Writing image details to imagedefinitions.json...
+      - printf '[{"name":"javaservice","imageUri":"%s"}]' $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/javaservice:latest > imagedefinitions.json
+artifacts:
+  files:
+    - imagedefinitions.json
