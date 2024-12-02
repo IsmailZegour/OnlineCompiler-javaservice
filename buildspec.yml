@@ -1,5 +1,10 @@
 version: 0.2
 phases:
+  install:
+    commands:
+      - echo Installing Java 21...
+      - sudo yum install -y java-21-openjdk-devel
+      - java -version
   pre_build:
     commands:
       - echo Installing Maven dependencies and building the JAR file...
