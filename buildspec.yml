@@ -2,7 +2,7 @@ version: 0.2
 phases:
   install:
     commands:
-      - echo Installing Java 21...
+      - echo Installing Java 21....
       - sudo yum install -y java-21-amazon-corretto-devel # Installe Java 21
       - sudo alternatives --config java <<< '1' # Définit Java 21 comme version par défaut
       - java -version # Vérifie que Java 21 est bien utilisé
